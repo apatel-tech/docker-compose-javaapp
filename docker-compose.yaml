@@ -1,0 +1,32 @@
+---
+version: "3.10"
+services:
+  webapp:
+    build: server
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+    links:
+      - database
+      - smtp
+  database:
+    build: database
+    ports:
+      - "5432:5432"
+    environment:
+      - DEBUG=true
+      - POSTGRES_USER=emailboot
+      - POSTGRES_PASSWORD=emailboot
+  smtp:
+    build: smtp
+    ports:
+      - "25:25"
+    environment:
+      - maildomain=emailboot.net
+      - smtp_user=user:pwd
+      - messageSizeLimit=40960000
+      - mailboxSizeLimit=40960000
+
+
